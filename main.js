@@ -1,16 +1,10 @@
 var app = require("express")();
 app.set('view engine','ejs');
 app.use( require("express").static( "public" ) );
-
 var pg = require("pg");
-var pgClient = new pg.Client({
-    host:"localhost",
-    user:"postgres",
-    port:5432,
-    password:"postgres",
-    database:"covid_vaccine"
-});
-pgClient.connect();
+var pgClient;
+var username;
+
 
 app.get('/SD/:id', function(req, res, next) { 
 
@@ -23,8 +17,6 @@ app.get('/SD/:id', function(req, res, next) {
     }else{
         my_query="NA"
     }
-
-
     pgClient.query(my_query, (error, results) => {
         if (error) {
             // console.log("error:"+error.message)
@@ -51,8 +43,35 @@ app.get('/Table', function(req, res, next) {
     })          
 });
 
+app.get('/Home',(req,res)=>{
+    res.render("Home",{Name:username,Flag:true})
+})
+
+
+app.get("/Login",(req,res)=>{
+    username = req.query.username
+    // console.log(req.query.pwd)
+    pgClient = new pg.Client({
+        host:"localhost",
+        user:username,
+        port:5432,
+        password:req.query.pwd,
+        database:"covid_vaccine"
+    });
+    pgClient.connect(function(err) {
+        if (err){
+            console.log(err.message)
+            res.render("Home",{Name:username,Flag:false})
+        }
+        else{
+            console.log('Database is connected successfully !');
+            res.render("Home",{Name:username,Flag:true})
+        }
+    });
+})
+
 app.get('/',(req,res)=>{
-    res.render("Home")
+    res.render("Login")
 })
 
 app.listen(3000,()=>{
