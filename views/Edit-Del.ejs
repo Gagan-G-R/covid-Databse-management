@@ -52,28 +52,17 @@
 
         <tbody>
           <% if(data.rows.length>0){
-    
-          for(var i = 0; i< data.rows.length; i++) {
-            %>  
+          for(var i = 0; i< data.rows.length; i++) {%>  
           <tr>
-
-            <th scope="row"><%= (i+1) %></th>
-            <% for (const item in data.rows[i]) { %>
-              <td><%= data.rows[i][item]%></td> 
-            <% } %>
-            <%
-              var str=""
-              pk.forEach((j)=>{
-                  str+=data.rows[i][j.column_name]+","
-              })
-              str= str.slice(0, -1);
-              console.log(str)
-            %>
-            
-            <td>
-              <a href="http://localhost:3000/Edit/<%=str%>"><button type="button" class="btn btn-secondary">Edit</button></a>
-              <a href="http://localhost:3000/Del/<%=str%>"><button type="button" class="btn btn-danger">Delete</button></a>
-            </td>
+            <form action="http://localhost:3000/AfterEdit" method="GET">
+                <th scope="row"><%= (i+1) %></th>
+                <% for (const item in data.rows[i]) { %>
+                  <td><input placeholder="<%= data.rows[i][item]%>" name="<%= item %>"/></td> 
+                <% } %>
+                <td>
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </td>
+            </form>
           </tr>
           <% }
                   
