@@ -10,15 +10,6 @@ var pk_details;
 var insert_id ;
 app.get('/Insert', function(req, res, next) {
     insert_query="select * from "+tname
-    // insert_id=req.params.id
-    // value = edit_id.split(",")
-    // console.log(value)
-    // count=0
-    // pk_details.forEach((i)=>{
-    //     edit_query+=String(i.column_name)+"= '"+value[count]+"' and "
-    //     count+=1
-    // })
-    // insert_query= insert_query.slice(0, -4);
     console.log(insert_query)
     pgClient.query(insert_query, (error, results) => {
         if (error) {
@@ -42,17 +33,6 @@ app.get('/AfterInsert', function(req, res, next) {
     itemname=itemname.slice(0,-1)+")"
     valuename=valuename.slice(0,-1)+")"
     after_insert_query+=itemname+" values " +valuename
-    // after_edit_query= after_edit_query.slice(0, -1);
-    // after_edit_query+="where "
-    // value = edit_id.split(",")
-    // console.log(value)
-    // count=0
-    // pk_details.forEach((i)=>{
-    //         after_edit_query+=String(i.column_name)+"= '"+value[count]+"' and "
-
-    //     count+=1
-    // })
-    // after_edit_query= after_edit_query.slice(0, -4);
     console.log(after_insert_query)
 
     pgClient.query(after_insert_query, (error, results) => {
@@ -186,14 +166,26 @@ app.get('/AfterDel', function(req, res, next) {
     }) 
 });
 
-app.get('/SD/:id', function(req, res, next) { 
+app.get('/AT/:id', function(req, res) { 
 
     if(req.params.id ==1){
-        tname="dose"
+        tname="batch"
     }else if(req.params.id==2){
-        tname="doctor"
+        tname="distribution"
     }else if(req.params.id==3){
-        tname="hospital"
+        tname="distributor"
+    }else if(req.params.id==4){
+        tname="doctor"
+    }else if(req.params.id==5){
+        tname="dose"
+    }else if(req.params.id==6){
+        tname="hospitals"
+    }else if(req.params.id==7){
+        tname="manufacturer"
+    }else if(req.params.id==8){
+        tname="people"
+    }else if(req.params.id==9){
+        tname="status"
     }else{
         tname="NA"
     }
@@ -228,6 +220,31 @@ app.get('/SD/:id', function(req, res, next) {
     })          
 });
 
+
+
+app.get('/SQ/:id', function(req, res) { 
+
+    if(req.params.id ==1){
+        sd_query="select ph_no,dosedate from people inner join status on SSN = p_SSN  where doseno = '1' and dosedate<'2021-03-1'"
+    }else if(req.params.id==2){
+        sd_query="select count(*),sum(batch_size),hspid from distribution inner join batch on batchid=batch_id group by hspid"
+    }else if(req.params.id==3){
+        sd_query="select mf_id,count(*) from manufacturer inner join batch on mf_id=mfg_id group by mf_id order by count(*) desc"
+    }else if(req.params.id==4){
+        sd_query="select count(ssn),dose_no from people,Dose,hospital where hospital_id=hsp_id and h_id=hsp_id group by dose_no"
+    }else{
+        sd_query="NA"
+    }
+    pgClient.query(sd_query, (error, results) => {
+        if (error) {
+            console.log("error:"+error.message)
+            res.render("Text_Table",{data:error.message,Flag:true})
+        }
+        else{
+            res.render("Text_Table",{data:results,Flag:false})
+        }
+    })  
+});
 
 // this is for rendering the table for the query writen in the test box
 app.get('/Table', function(req, res) { 

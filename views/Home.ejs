@@ -29,15 +29,28 @@
 
 
 
-    <br><br><br>
+    <br>
     <h1 class="middle">Welcome <%= Name %> </h1>
-    <h1>Some standard Queres</h1>
+    <h1>All Tables</h1>
 
-    <a href='http://localhost:3000/SD/1'><button class="btn btn-primary">get all dose</button></a>
-    <a href='http://localhost:3000/SD/2'><button class="btn btn-primary">get all doc</button></a>
-    <a href='http://localhost:3000/SD/3'><button class="btn btn-primary">get all hospitels</button></a>
+    <a href='http://localhost:3000/AT/1'><button class="btn btn-primary">Batch</button></a>
+    <a href='http://localhost:3000/AT/2'><button class="btn btn-primary">Distribution</button></a>
+    <a href='http://localhost:3000/AT/3'><button class="btn btn-primary">Distributor</button></a>
+    <a href='http://localhost:3000/AT/4'><button class="btn btn-primary">Doctor</button></a>
+    <a href='http://localhost:3000/AT/5'><button class="btn btn-primary">Hospital</button></a>
+    <a href='http://localhost:3000/AT/7'><button class="btn btn-primary">Manufacturer</button></a>
+    <a href='http://localhost:3000/AT/8'><button class="btn btn-primary">People</button></a>
+    <a href='http://localhost:3000/AT/9'><button class="btn btn-primary">Status</button></a>
 
-    <br><br><br>
+    <br><br>
+    <h1>Some Standard Queries</h1>
+
+    <a href='http://localhost:3000/SQ/1'><button class="btn btn-primary">Get all the people’s phone number who have to still get their 2nddose and have gotten their first dose before 2021-03-1</button></a><br><br>
+    <a href='http://localhost:3000/SQ/2'><button class="btn btn-primary">Find the total no of doses received for a hospital</button></a><br><br>
+    <a href='http://localhost:3000/SQ/3'><button class="btn btn-primary">Arrange the manufacturer in maximum manufacturedbatches</button></a><br><br>
+    <a href='http://localhost:3000/SQ/4'><button class="btn btn-primary">Finding the number of people who have taken eitherdose</button></a>
+
+    <br><br>
     <h1>Make Your Own Query</h1>
     <form action="http://localhost:3000/Table" method="GET">
       <div class="form-group">
