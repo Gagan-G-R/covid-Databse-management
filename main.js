@@ -22,10 +22,10 @@ app.get('/Edit/:id', function(req, res, next) {
     console.log(edit_query)
     pgClient.query(edit_query, (error, results) => {
         if (error) {
-            res.render("Edit-Del",{data:error.message,Flag:true})
+            res.render("Edit",{data:error.message,Flag:true})
         }
         else{
-            res.render("Edit-Del",{data:results,Flag:false,pk:pk_details})
+            res.render("Edit",{data:results,Flag:false,pk:pk_details})
         }
     }) 
 });
@@ -68,6 +68,58 @@ app.get('/AfterEdit', function(req, res, next) {
     }) 
 });
 
+
+
+var del_id ;
+app.get('/Del/:id', function(req, res) {
+    del_query="select * from "+tname+" where "
+    del_id=req.params.id
+    value = del_id.split(",")
+    // console.log(value)
+    count=0
+    pk_details.forEach((i)=>{
+        del_query+=String(i.column_name)+"= '"+value[count]+"' and "
+        count+=1
+    })
+    del_query= del_query.slice(0, -4);
+    // console.log(edit_query)
+    pgClient.query(del_query, (error, results) => {
+        if (error) {
+            res.render("Del",{data:error.message,Flag:true})
+        }
+        else{
+            res.render("Del",{data:results,Flag:false,pk:pk_details})
+        }
+    }) 
+});
+
+app.get('/AfterDel', function(req, res, next) { 
+    after_del_query="delete from "+tname+" where  "
+    value = del_id.split(",")
+    console.log(value)
+    count=0
+    pk_details.forEach((i)=>{
+        after_del_query+=String(i.column_name)+"= '"+value[count]+"' and "
+        count+=1
+    })
+    after_del_query= after_del_query.slice(0, -4);
+    console.log(after_del_query)
+    pgClient.query(after_del_query, (error, results) => {
+        if (error) {
+            res.render("Table",{data:error.message,Flag:true})
+        }
+        else{
+            pgClient.query("select * from "+tname,(error,result)=>{
+                if(error){
+                    res.render("Table",{data:error.message,Flag:true})
+                }
+                else{
+                    res.render("Table",{data:result,Flag:false,pk:pk_details})
+                }
+            })
+        }
+    }) 
+});
 
 app.get('/SD/:id', function(req, res, next) { 
 
