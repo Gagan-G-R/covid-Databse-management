@@ -7,6 +7,71 @@ var username;
 var tname;
 var pk_details;
 
+var insert_id ;
+app.get('/Insert', function(req, res, next) {
+    insert_query="select * from "+tname
+    // insert_id=req.params.id
+    // value = edit_id.split(",")
+    // console.log(value)
+    // count=0
+    // pk_details.forEach((i)=>{
+    //     edit_query+=String(i.column_name)+"= '"+value[count]+"' and "
+    //     count+=1
+    // })
+    // insert_query= insert_query.slice(0, -4);
+    console.log(insert_query)
+    pgClient.query(insert_query, (error, results) => {
+        if (error) {
+            res.render("Insert",{data:error.message,Flag:true})
+        }
+        else{
+            res.render("Insert",{data:results,Flag:false})
+        }
+    }) 
+});
+app.get('/AfterInsert', function(req, res, next) { 
+    after_insert_query="insert into "+tname+" "
+    itemname="("
+    valuename="("
+    for(const item in req.query){
+        if(req.query[item]!=""){
+            itemname+=String(item)+","
+            valuename+="'"+String(req.query[item])+"',"
+        }
+    }
+    itemname=itemname.slice(0,-1)+")"
+    valuename=valuename.slice(0,-1)+")"
+    after_insert_query+=itemname+" values " +valuename
+    // after_edit_query= after_edit_query.slice(0, -1);
+    // after_edit_query+="where "
+    // value = edit_id.split(",")
+    // console.log(value)
+    // count=0
+    // pk_details.forEach((i)=>{
+    //         after_edit_query+=String(i.column_name)+"= '"+value[count]+"' and "
+
+    //     count+=1
+    // })
+    // after_edit_query= after_edit_query.slice(0, -4);
+    console.log(after_insert_query)
+
+    pgClient.query(after_insert_query, (error, results) => {
+        if (error) {
+            res.render("Table",{data:error.message,Flag:true})
+        }
+        else{
+            pgClient.query("select * from "+tname,(error,result)=>{
+                if(error){
+                    res.render("Table",{data:error.message,Flag:true})
+                }
+                else{
+                    res.render("Table",{data:result,Flag:false,pk:pk_details})
+                }
+            })
+        }
+    }) 
+});
+
 var edit_id ;
 app.get('/Edit/:id', function(req, res, next) {
     edit_query="select * from "+tname+" where "
