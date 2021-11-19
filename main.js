@@ -179,7 +179,7 @@ app.get('/AT/:id', function(req, res) {
     }else if(req.params.id==5){
         tname="dose"
     }else if(req.params.id==6){
-        tname="hospitals"
+        tname="hospital"
     }else if(req.params.id==7){
         tname="manufacturer"
     }else if(req.params.id==8){
