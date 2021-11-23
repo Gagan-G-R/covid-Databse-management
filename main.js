@@ -116,7 +116,7 @@ app.get('/AfterEdit', function(req, res, next) {
 
 
 var del_id ;
-app.get('/Del/:id', function(req, res) {
+app.get('/Del/:id' , function(req, res) {
     del_query="select * from "+tname+" where "
     del_id=req.params.id
     value = del_id.split(",")
